@@ -11,6 +11,7 @@ build: clean
 	cp u-boot.bin build/
 	cp config.txt build/
 	cp bcm2710-rpi-3-b-plus.dtb build/
+	cp fixup.dat build/
 
 .PHONY: flash
 flash: build
