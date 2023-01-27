@@ -7,6 +7,10 @@ clean:
 directories:
 	mkdir -p build/
 
+# ===============================
+# Common Build steps.
+# ===============================
+
 .PHONY: build-bootscript
 build-bootscript: directories
 	mkimage \
@@ -25,10 +29,31 @@ build-common: clean \
 	cp bcm2710-rpi-3-b-plus.dtb build/
 	cp fixup.dat build/
 
+# ===============================
+# Commands for specific boot modes (SD boot or TFTP boot) and files.
+# ===============================
+
+# Boots from SD card and immediately runs sel4test.
 .PHONY: build-sdboot-sel4test
 build-sdboot-sel4test: build-common
 	$(MAKE) build-bootscript \
 		BOOT_SCRIPT="sdboot-sel4test.script"
+
+# Boots from home TFTP server and immediately runs /tftboot/rpi3bp/image.bin on
+# home server.
+.PHONY: build-tftpboot-home
+build-tftpboot-home: build-common
+	$(MAKE) build-bootscript \
+		BOOT_SCRIPT="tftpboot-home.script"
+
+# ===============================
+# Flashing the SD card
+# ===============================
+
+.PHONY: ls-sdcard
+ls-sdcard:
+	@echo "===> Listing files on SD card at $(SDCARD_PATH)"
+	ls -la $(SDCARD_PATH)
 
 .PHONY: flash-common
 flash-common:
@@ -40,14 +65,22 @@ else
 	rm -vrf $(SDCARD_PATH)/*
 	# Copy everything from build onto SD card.
 	cp -vR build/* $(SDCARD_PATH)
-	# Copy an sel4test image onto SD card.
-	cp -v images/sel4test-driver-image-arm-bcm2837 $(SDCARD_PATH)/sel4test.bin
-	@echo "===> Finished flashing SD card at $(SDCARD_PATH)"
-	@echo "===> Listing files on SD card at $(SDCARD_PATH)"
-	ls -la $(SDCARD_PATH)
 endif
 
+# E.g. $ make flash-sdboot-sel4test SDCARD_PATH="/Volumes/SDCARD/"
 .PHONY: flash-sdboot-sel4test
 flash-sdboot-sel4test: \
 	build-sdboot-sel4test \
 	flash-common
+	# Copy an sel4test image onto SD card.
+	cp -v images/sel4test-driver-image-arm-bcm2837 $(SDCARD_PATH)/sel4test.bin
+	@echo "===> Finished flashing SD card at $(SDCARD_PATH) to SD boot sel4test."
+	$(MAKE) ls-sdcard
+
+# E.g. $ make flash-tftpboot-home SDCARD_PATH="/Volumes/SDCARD/"
+.PHONY: flash-tftpboot-home
+flash-tftpboot-home: \
+	build-tftpboot-home \
+	flash-common
+	@echo "===> Finished flashing SD card at $(SDCARD_PATH) for TFTP boot at home."
+	$(MAKE) ls-sdcard
