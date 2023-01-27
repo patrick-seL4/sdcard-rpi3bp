@@ -5,7 +5,14 @@ The instructions to obtain these files can be found here: https://docs.sel4.syst
 These instructions were also used as a reference: https://summit.ivanvelickovic.com/rpi3b.html
 
 ## Explanation of required files
-### Why is `fixup.dat` required?
+
+### `bcm2710-rpi-3-b-plus.dtb`
+
+The Device Tree Blob (DTB) for our device was obtained from here: https://github.com/raspberrypi/firmware/blob/master/boot/bcm2710-rpi-3-b-plus.dtb
+
+### `fixup.dat`
+
+#### Why is `fixup.dat` required?
 
 If `fixup.dat` isn't present, attempts to load `sel4test.bin` at `0x10000000` via UBoot will yield the following error:
 
@@ -52,11 +59,11 @@ Early malloc usage: 738 / 2000
 ```
 We can see that the `size` of the memory is being reported as `0x8000000` and the memory address range we have access to is from `0x0` to `0x7ffffff`. This explains why we weren't able to load our binary at `0x10000000`.
 
-### Where to obtain `fixup.dat` from?
+#### Where to obtain `fixup.dat` from?
 
 `fixup.dat` should come from [this repo](https://github.com/raspberrypi/firmware/blob/master/boot/fixup.dat); however, I wasn't able to get that version of the file working. But an older version of `fixup.dat` in this repo works.
 
-### What should be observed when `fixup.dat` is included?
+#### What should be observed when `fixup.dat` is included?
 
 If `fixup.dat` is included, we get the following output when we run `bdinfo`:
 
