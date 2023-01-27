@@ -3,9 +3,12 @@
 clean:
 	rm -rf build/
 
-.PHONY: build
-build: clean
+.PHONY: directories
+directories:
 	mkdir -p build/
+
+.PHONY: build
+build: clean directories
 	cp bootcode.bin build/
 	cp start.elf build/
 	cp u-boot.bin build/
