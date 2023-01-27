@@ -36,5 +36,7 @@ else
 	cp -vR build/* $(SDCARD_PATH)
 	# Copy an sel4test image onto SD card.
 	cp -v images/sel4test-driver-image-arm-bcm2837 $(SDCARD_PATH)/sel4test.bin
-	@echo "Finished flashing SD card at $(SDCARD_PATH)"
+	@echo "===> Finished flashing SD card at $(SDCARD_PATH)"
+	@echo "===> Listing files on SD card at $(SDCARD_PATH)"
+	ls -la $(SDCARD_PATH)
 endif
