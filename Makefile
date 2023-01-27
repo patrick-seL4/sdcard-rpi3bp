@@ -46,6 +46,13 @@ build-tftpboot-home: build-common
 	$(MAKE) build-bootscript \
 		BOOTSCRIPT="tftpboot-home.script"
 
+# Boots from home PXE server and immediately runs /tftboot/rpi3bp/image.bin on
+# home server.
+.PHONY: build-pxeboot-home
+build-pxeboot-home: build-common
+	$(MAKE) build-bootscript \
+		BOOTSCRIPT="pxeboot-home.script"
+
 # ===============================
 # Flashing the SD card
 # ===============================
@@ -83,4 +90,12 @@ flash-tftpboot-home: \
 	build-tftpboot-home \
 	flash-common
 	@echo "===> Finished flashing SD card at $(SDCARD_PATH) for TFTP boot at home."
+	$(MAKE) ls-sdcard
+
+# E.g. $ make flash-pxeboot-home SDCARD_PATH="/Volumes/SDCARD/"
+.PHONY: flash-pxeboot-home
+flash-pxeboot-home: \
+	build-pxeboot-home \
+	flash-common
+	@echo "===> Finished flashing SD card at $(SDCARD_PATH) for PXE boot at home."
 	$(MAKE) ls-sdcard

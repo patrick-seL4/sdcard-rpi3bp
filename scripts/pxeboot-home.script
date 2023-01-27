@@ -1,0 +1,2 @@
+setenv boot_targets "pxe"
+setenv pxefile_addr_r 0x10000000
