@@ -15,7 +15,14 @@ build: clean
 
 .PHONY: flash
 flash: build
+# Only build the Core Platform if the SDK doesn't exist already.
+ifeq ("$(wildcard $(SDCARD_PATH))","")
+	@echo "The SD Card does not exist."
+else
 	# Clear out everything on the SD Card.
-	rm -rf $(SDCARD_PATH)/*
+	rm -vrf $(SDCARD_PATH)/*
 	# Copy everything from build onto SD Card.
 	cp -vR build/* $(SDCARD_PATH)
+	# Copy an sel4test image onto SD Card.
+	cp -v images/sel4test-driver-image-arm-bcm2837 $(SDCARD_PATH)/sel4test.bin
+endif
