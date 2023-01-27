@@ -16,7 +16,7 @@ build-bootscript: directories
 	mkimage \
 		-A arm \
 		-T script \
-		-d scripts/$(BOOT_SCRIPT) \
+		-d scripts/$(BOOTSCRIPT) \
 		build/boot.scr
 
 .PHONY: build-common
@@ -37,14 +37,14 @@ build-common: clean \
 .PHONY: build-sdboot-sel4test
 build-sdboot-sel4test: build-common
 	$(MAKE) build-bootscript \
-		BOOT_SCRIPT="sdboot-sel4test.script"
+		BOOTSCRIPT="sdboot-sel4test.script"
 
 # Boots from home TFTP server and immediately runs /tftboot/rpi3bp/image.bin on
 # home server.
 .PHONY: build-tftpboot-home
 build-tftpboot-home: build-common
 	$(MAKE) build-bootscript \
-		BOOT_SCRIPT="tftpboot-home.script"
+		BOOTSCRIPT="tftpboot-home.script"
 
 # ===============================
 # Flashing the SD card
