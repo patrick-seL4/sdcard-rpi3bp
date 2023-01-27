@@ -12,13 +12,12 @@ build-bootscript: directories
 	mkimage \
 		-A arm \
 		-T script \
-		-d boot.script \
+		-d scripts/$(BOOT_SCRIPT) \
 		build/boot.scr
 
-.PHONY: build
-build: clean \
-	directories \
-	build-bootscript
+.PHONY: build-common
+build-common: clean \
+	directories
 	cp bootcode.bin build/
 	cp start.elf build/
 	cp u-boot.bin build/
@@ -26,8 +25,13 @@ build: clean \
 	cp bcm2710-rpi-3-b-plus.dtb build/
 	cp fixup.dat build/
 
-.PHONY: flash
-flash: build
+.PHONY: build-sdboot-sel4test
+build-sdboot-sel4test: build-common
+	$(MAKE) build-bootscript \
+		BOOT_SCRIPT="boot.script"
+
+.PHONY: flash-common
+flash-common:
 # Only build the Core Platform if the SDK doesn't exist already.
 ifeq ("$(wildcard $(SDCARD_PATH))","")
 	@echo "The SD card does not exist."
@@ -42,3 +46,8 @@ else
 	@echo "===> Listing files on SD card at $(SDCARD_PATH)"
 	ls -la $(SDCARD_PATH)
 endif
+
+.PHONY: flash-sdboot-sel4test
+flash-sdboot-sel4test: \
+	build-sdboot-sel4test \
+	flash-common
