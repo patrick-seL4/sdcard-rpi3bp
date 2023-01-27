@@ -7,6 +7,14 @@ clean:
 directories:
 	mkdir -p build/
 
+.PHONY: build-bootscript
+build-bootscript: directories
+	mkimage \
+		-A arm \
+		-T script \
+		-d boot.script \
+		build/boot.scr
+
 .PHONY: build
 build: clean directories
 	cp bootcode.bin build/
