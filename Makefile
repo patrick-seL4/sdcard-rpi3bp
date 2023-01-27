@@ -28,7 +28,7 @@ build-common: clean \
 .PHONY: build-sdboot-sel4test
 build-sdboot-sel4test: build-common
 	$(MAKE) build-bootscript \
-		BOOT_SCRIPT="boot.script"
+		BOOT_SCRIPT="sdboot-sel4test.script"
 
 .PHONY: flash-common
 flash-common:
