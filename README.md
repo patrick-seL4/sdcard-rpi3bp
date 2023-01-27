@@ -4,7 +4,7 @@ The instructions to obtain these files can be found here: https://docs.sel4.syst
 
 These instructions were also used as a reference: https://summit.ivanvelickovic.com/rpi3b.html
 
-## Explanation
+## Explanation of required files
 ### Why is `fixup.dat` required?
 
 If `fixup.dat` isn't present, attempts to load `sel4test.bin` at `0x10000000` via UBoot will yield the following error:
