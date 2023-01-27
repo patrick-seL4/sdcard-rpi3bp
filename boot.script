@@ -1,2 +1,3 @@
 
-
+fatload mmc 0 0x10000000 sel4test-driver-image-arm-bcm2837
+go 0x10000000
