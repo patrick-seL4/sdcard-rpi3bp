@@ -16,7 +16,9 @@ build-bootscript: directories
 		build/boot.scr
 
 .PHONY: build
-build: clean directories
+build: clean \
+	directories \
+	build-bootscript
 	cp bootcode.bin build/
 	cp start.elf build/
 	cp u-boot.bin build/
