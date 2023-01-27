@@ -43,8 +43,9 @@ build-sdboot-sel4test: build-common
 # home server.
 .PHONY: build-tftpboot-home
 build-tftpboot-home: build-common
-	$(MAKE) build-bootscript \
-		BOOTSCRIPT="tftpboot-home.script"
+	# $(MAKE) build-bootscript \
+	# 	BOOTSCRIPT="tftpboot-home.script"
+	cp -v ubootenv/tftpboot-home.env build/uboot.env
 
 # ===============================
 # Flashing the SD card
