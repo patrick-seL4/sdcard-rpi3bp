@@ -1,11 +1,11 @@
-echo ===== Saving RPi's IP Address =====
+echo ===== Saving RPis IP Address =====
 setenv ipaddr 192.168.0.199
 
-echo ===== Saving Home TFTP server's IP Address =====
+echo ===== Saving Home TFTP servers IP Address =====
 setenv serverip 192.168.0.198
 
 echo ===== Loading file from Home TFTP server =====
-tftp 0x10000000 rpi3bp/image.bin
+tftp 0x10000000 rpi3bp/image.bin; setenv ret $?
 
 echo ===== Running image =====
-go 0x10000000
+if test $ret -eq 0; then go 0x10000000; fi
