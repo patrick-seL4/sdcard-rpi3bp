@@ -58,7 +58,7 @@ ls-sdcard:
 
 .PHONY: flash-common
 flash-common:
-# Only build the Core Platform if the SDK doesn't exist already.
+# Don't flash if the SD card does not exist.
 ifeq ("$(wildcard $(SDCARD_PATH))","")
 	@echo "The SD card does not exist."
 else
