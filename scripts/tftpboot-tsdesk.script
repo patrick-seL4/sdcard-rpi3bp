@@ -1,0 +1,11 @@
+echo ===== Saving RPis IP Address =====
+setenv ipaddr 172.16.1.210
+
+echo ===== Saving TS TFTP servers IP Address =====
+setenv serverip 172.16.0.2
+
+echo ===== Loading file from TS TFTP server =====
+tftp 0x10000000 rpi3/loader.img
+
+echo ===== Running image =====
+go 0x10000000

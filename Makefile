@@ -47,6 +47,12 @@ build-tftpboot-home: build-common
 		BOOTSCRIPT="tftpboot-home.script"
 	# cp -v ubootenv/tftpboot-home.env build/uboot.env
 
+# Boots from my desk's TS TFTP server.
+.PHONY: build-tftpboot-tsdesk
+build-tftpboot-tsdesk: build-common
+	$(MAKE) build-bootscript \
+		BOOTSCRIPT="tftpboot-tsdesk.script"
+
 # ===============================
 # Flashing the SD card
 # ===============================
@@ -85,3 +91,12 @@ flash-tftpboot-home: \
 	flash-common
 	@echo "===> Finished flashing SD card at $(SDCARD_PATH) for TFTP boot at home."
 	$(MAKE) ls-sdcard
+
+# E.g. $ make flash-tftpboot-tsdesk SDCARD_PATH="/Volumes/SDCARD/"
+.PHONY: flash-tftpboot-tsdesk
+flash-tftpboot-tsdesk: \
+	build-tftpboot-tsdesk \
+	flash-common
+	@echo "===> Finished flashing SD card at $(SDCARD_PATH) for TFTP boot at TS on my desk."
+	$(MAKE) ls-sdcard
+
