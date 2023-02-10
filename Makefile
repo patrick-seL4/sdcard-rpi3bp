@@ -28,6 +28,7 @@ build-common: clean \
 	cp config.txt build/
 	cp bcm2710-rpi-3-b-plus.dtb build/
 	cp fixup.dat build/
+	cp -R overlays build/
 
 # ===============================
 # Commands for specific boot modes (SD boot or TFTP boot) and files.
