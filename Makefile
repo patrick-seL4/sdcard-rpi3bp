@@ -1,11 +1,13 @@
 
+BUILD_DIR = build
+
 .PHONY: clean
 clean:
-	rm -rf build/
+	rm -rf $(BUILD_DIR)/
 
 .PHONY: directories
 directories:
-	mkdir -p build/
+	mkdir -p $(BUILD_DIR)/
 
 # ===============================
 # Common Build steps.
@@ -17,18 +19,31 @@ build-bootscript: directories
 		-A arm \
 		-T script \
 		-d scripts/$(BOOTSCRIPT) \
-		build/boot.scr
+		$(BUILD_DIR)/boot.scr
+
+# To understand what all the arguments of the dtc command mean run:
+# $ dtc -h
+.PHONY: build-sdhci-overlay
+build-sdhci-overlay: directories
+	dtc \
+		-@ \
+		-I dts \
+		-O dtb \
+		-o $(BUILD_DIR)/sdhci_overlay.dtbo \
+		sdhci_overlay.dts
 
 .PHONY: build-common
-build-common: clean \
-	directories
-	cp bootcode.bin build/
-	cp start.elf build/
-	cp u-boot.bin build/
-	cp config.txt build/
-	cp bcm2710-rpi-3-b-plus.dtb build/
-	cp fixup.dat build/
-	cp -R overlays build/
+build-common: \
+	clean \
+	directories \
+	build-sdhci-overlay
+	cp bootcode.bin $(BUILD_DIR)/
+	cp start.elf $(BUILD_DIR)/
+	cp u-boot.bin $(BUILD_DIR)/
+	cp config.txt $(BUILD_DIR)/
+	cp bcm2710-rpi-3-b-plus.dtb $(BUILD_DIR)/
+	cp fixup.dat $(BUILD_DIR)/
+	cp -R overlays $(BUILD_DIR)/
 
 # ===============================
 # Commands for specific boot modes (SD boot or TFTP boot) and files.
@@ -46,7 +61,7 @@ build-sdboot-sel4test: build-common
 build-tftpboot-home: build-common
 	$(MAKE) build-bootscript \
 		BOOTSCRIPT="tftpboot-home.script"
-	# cp -v ubootenv/tftpboot-home.env build/uboot.env
+	# cp -v ubootenv/tftpboot-home.env $(BUILD_DIR)/uboot.env
 
 # Boots from my desk's TS TFTP server.
 .PHONY: build-tftpboot-tsdesk
